@@ -4,17 +4,7 @@ from django.http import JsonResponse
 from rest_framework.exceptions import NotAuthenticated, PermissionDenied, ValidationError
 from rest_framework.response import Response
 from rest_framework.views import exception_handler as drf_exception_handler
-
-
-class DomainError(Exception):
-    def __init__(self, message, code="validation_error", status=400, fields=None, location=None, current_version=None):
-        super().__init__(message)
-        self.message, self.code, self.status = message, code, status
-        self.fields, self.location, self.current_version = fields or {}, location, current_version
-
-    def payload(self):
-        return {"error": {"code": self.code, "message": self.message, "fields": self.fields,
-                          "location": self.location, "current_version": self.current_version}}
+from .exceptions import DomainError
 
 
 def csrf_failure(request, reason=""):
@@ -51,4 +41,3 @@ def exception_handler(exc, context):
 
 def server_error(request):
     return JsonResponse(DomainError("The request failed. Your entered values are retained; retry or reload the latest record.", "server_error", 500).payload(), status=500)
-
