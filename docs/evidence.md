@@ -63,4 +63,16 @@ Other practical limits: prepared nonnegative input only, binary64 numerical rang
 
 ## Delivery record
 
-The final implementation commit, exact successful counts, fresh-checkout setup, and stopped/restarted local serving check are appended here after execution.
+The implementation commit is [`a2ae17fecec216a856274695ee8de3882c03e7d1`](https://github.com/fullstack-nick/TraceReview/commit/a2ae17fecec216a856274695ee8de3882c03e7d1). The subsequent evidence-only commit records these completed observations; application code is unchanged.
+
+- A fresh clone from the public GitHub remote ran `./scripts/setup.ps1` and `./scripts/verify.ps1 -IncludeDev` successfully. It installed from the two lockfiles, initialized a fresh analyst/database, built the frontend, and served both test modes. Its working tree stayed clean and its build metadata recorded the implementation commit with `working_tree_dirty: false`.
+- **34 backend tests passed** in the fresh checkout, including the exact-size CSV acceptance and backup/new-process restoration checks. Django system checks and migration drift checks passed.
+- **17 browser scenarios passed against the built Waitress/WhiteNoise application**, and the same **17 passed against the Vite development proxy**, with no retries. ESLint, strict TypeScript, and the production build passed.
+- The production bundle contains a roughly 251 kB initial JavaScript chunk and a separately loaded 1,157 kB basic Plotly chunk (about 78/383 kB gzip respectively). These are build observations, not performance benchmarks.
+- The normal local database was populated with two original synthetic demonstrations: one editable saved trace and one completed trace containing two revisions. The neighboring-feature intervals 3.2–5.1 and 3.2–5.8 min produced approximately 79.99596041590465% and 99.15423360584256%. Their provenance records the clean implementation commit.
+- Running setup again preserved both traces, the existing password hash, persistent signing secret, and exact completed report. The existing analyst was left unchanged.
+- Startup on occupied port 8000 failed with the documented message and left the running process intact. Only the implementation-owned process tree was then stopped. Restart through `scripts/start.ps1` served the build at 127.0.0.1:8000.
+- A real authenticated HTTP session survived that restart. Its completed JSON and original CSV matched the pre-restart bytes, and both initial static assets loaded. The synthetic completed JSON SHA-256 was `6f5b19f2a12e1d89271f980b96829365dcff1045f0e78b1b9f36e742a480b169` before and after restart.
+- The source repository is public at [fullstack-nick/TraceReview](https://github.com/fullstack-nick/TraceReview). MIT, installed-dependency notices, synthetic fixtures, specifications, tests, and selected screenshots are included. Git excludes local data, credentials, secrets, logs, environments, and generated artifacts. No deployment or CI/CD files are tracked.
+
+The fresh first backend test invocation reported a missing collected-static directory before the build step created it; the build and all subsequent built-browser checks succeeded. Local evidence logs are `.local/fresh-setup.log`, `.local/fresh-verification.log`, and `.local/setup-rerun.log`; they are intentionally not published.
