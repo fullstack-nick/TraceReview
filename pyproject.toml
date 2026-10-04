@@ -1,0 +1,17 @@
+[project]
+name = "tracereview"
+version = "0.1.0"
+description = "A local scientific trace-review workspace"
+requires-python = ">=3.13,<3.14"
+license = "MIT"
+dependencies = [
+  "Django==5.2.17",
+  "djangorestframework==3.18.1",
+  "numpy==2.5.3",
+  "waitress==3.0.2",
+  "whitenoise==6.12.0",
+]
+
+[tool.uv]
+package = false
+
